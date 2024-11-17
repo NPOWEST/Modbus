@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace Npowest\Modbus;
 
 use Socket;
 
@@ -59,7 +59,7 @@ final class Modbus
     public function setMsg(string $msg): void
     {
         $this->msg = $msg;
-    }
+    }//end setMsg()
 
     public function getError(): string
     {
@@ -85,6 +85,7 @@ final class Modbus
 
                     break;
                 }
+
                 $result = $this->listen();
 
                 if ($result)
@@ -95,7 +96,7 @@ final class Modbus
                 // Пауза перед повторной попыткой
                 sleep(10);
             }
-        }
+        }//end if
 
         $this->disconnect();
 
@@ -267,7 +268,8 @@ final class Modbus
     private function crc16(string $data): int
     {
         $crc = 0xFF_FF;
-        for ($i = 0; $i < mb_strlen($data); ++$i)
+        $len = mb_strlen($data);
+        for ($i = 0; $i < $len; ++$i)
         {
             $crc ^= ord($data[$i]);
             for ($j = 0; $j < 8; ++$j)
