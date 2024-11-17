@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+
+    <arg name="basepath" value="."/>
+    <arg name="cache" value=".phpcs-cache"/>
+    <arg name="colors"/>
+    <arg name="extensions" value="php"/>
+
+    <!-- Don't hide tokenizer exceptions -->
+    <rule ref="Internal.Tokenizer.Exception">
+        <type>error</type>
+    </rule>
+
+    <!-- Гарантирует, что массив имеет отступ на одну табуляцию. -->
+    <rule ref="Generic.Arrays.ArrayIndent">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <!-- Для определения массивов необходимо использовать синтаксис Short array. -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <!-- Имена классов и интерфейсов должны быть уникальными в проекте. Они никогда не должны дублироваться. -->
+    <rule ref="Generic.Classes.DuplicateClassName"></rule>
+    <!-- Обнаруживает присвоения переменных, выполняемые в рамках условий. -->
+    <rule ref="Generic.CodeAnalysis.AssignmentInCondition"></rule>
+    <!--
+        Проверяет наличие пустых инструкций PHP.
+        Проверяет наличие двух точек с запятой без исполняемого кода между ними.
+        Проверяет наличие пустой комбинации тегов открытия - закрытия PHP.
+     -->
+    <rule ref="Generic.CodeAnalysis.EmptyPHPStatement"></rule>
+    <!--
+        Этот sniff реализует общий алгоритм обнаружения тела пустого оператора.
+        Тело считается пустым, если оно полностью пустое или содержит только пробельные символы и/или комментарии.
+     -->
+    <rule ref="Generic.CodeAnalysis.EmptyStatement"></rule>
+    <!--
+        Обнаруживает циклы for, которые могут быть упрощены до цикла while.
+        Для циклов, которые имеют только второе выражение (условие), следует преобразовать в циклы while.
+     -->
+    <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"></rule>
+    <!--
+        Обнаруживает циклы for, которые используют вызов функции в тестовом выражении.
+        Циклы For не должны вызывать функции внутри цикла test for, если они могут быть вычислены заранее.
+     -->
+    <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
+    <!--
+        Обнаруживает перемешивание инкрементов в циклах for.
+        Анализатор инкрементов с перемешиванием обнаруживает использование одного и того же инкремента во внешнем и внутреннем цикле. Даже по замыслу это приводит к путанице в коде.
+        Приращения во вложенных циклах должны использовать разные имена переменных.
+     -->
+    <rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
+    <!--
+        Обнаруживает безусловные операторы if- и elseif-.
+        Операторы If, которые всегда вычисляются, не следует использовать.
+     -->
+    <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
+    <!--
+        Обнаруживает ненужные модификаторы final внутри конечных классов.
+        Анализатор ненужных модификаторов Final обнаруживает использование модификатора final внутри конечного класса, в котором нет необходимости.
+     -->
+    <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+    <!--
+        Проверяет наличие неиспользуемых параметров функции.
+        Этот анализ проверяет, что все параметры функции используются в теле функции.
+        Одно исключение сделано для пустых тел функций или тел функций, содержащих только комментарии.
+        Это может быть полезно для классов, реализующих интерфейс, который определяет несколько методов, но реализации нужны только некоторые из них.
+     -->
+    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+        <properties>
+             <property name="ignoreTypeHints" type="array">
+                <element value="InputInterface"/>
+            </property>
+        </properties>
+    </rule>
+    <!--
+        Обнаруживает ненужные переопределенные методы, которые просто вызывают своего родителя.
+        Метод UselessOverridingMethod sniff обнаруживает использование методов, которые вызывают метод родительского класса только с тем же именем и аргументами.
+        Эти методы не обязательны.
+     -->
+    <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"></rule>
+    <!-- Гарантирует, что блоки doc соответствуют базовому форматированию. -->
+    <!-- <rule ref="Generic.Commenting.DocComment"></rule> -->
+    <rule ref="Generic.Commenting.Fixme"></rule>
+    <rule ref="Generic.Commenting.Todo"></rule>
+    <!-- <rule ref="Generic.ControlStructures.DisallowYodaConditions"/> -->
+    <!-- Проверяет, что встроенные управляющие инструкции отсутствуют. -->
+    <rule ref="Generic.ControlStructures.InlineControlStructure">
+        <properties>
+            <property name="error" value="false"/>
+        </properties>
+    </rule>
+    <!-- Не следует использовать метки порядка байтов, которые могут повредить ваше приложение. К ним относятся 0xefbbbf (UTF-8), 0xfeff (UTF-16 BE) и 0xfffe (UTF-16 LE). -->
+    <rule ref="Generic.Files.ByteOrderMark"></rule>
+    <!-- Гарантирует, что файл заканчивается символом новой строки. -->
+    <rule ref="Generic.Files.EndFileNewline"></rule>
+    <!-- Проверяет, что файлы не являются исполняемыми. -->
+    <rule ref="Generic.Files.ExecutableFile"></rule>
+    <!-- Гарантирует, что весь файл содержит только PHP, без пробелов или встроенного HTML. -->
+    <rule ref="Generic.Files.InlineHTML"></rule>
+    <!-- Предпочтительны окончания строк в стиле Unix ("\n" вместо "\r\n"). -->
+    <rule ref="Generic.Files.LineEndings">
+        <properties>
+            <property name="eolChar" value="\n" />
+        </properties>
+    </rule>
+    <!-- This test file specifically *needs* Windows line endings for testing purposes. -->
+    <rule ref="Generic.Files.LineEndings.InvalidEOLChar">
+        <exclude-pattern>tests/Core/Tokenizer/StableCommentWhitespaceWinTest\.php</exclude-pattern>
+    </rule>
+    <!-- В файле должен быть определен только один класс. -->
+    <rule ref="Generic.Files.OneClassPerFile"></rule>
+    <!-- В файле должен быть определен только один интерфейс. -->
+    <rule ref="Generic.Files.OneInterfacePerFile"></rule>
+    <!-- В файле должен быть определен только один класс, интерфейс или признак. -->
+    <rule ref="Generic.Files.OneObjectStructurePerFile"></rule>
+    <!-- В файле должен быть определен только один признак. -->
+    <rule ref="Generic.Files.OneTraitPerFile"></rule>
+    <!-- Несколько инструкций в одной строке не допускаются. -->
+    <rule ref="Generic.Formatting.DisallowMultipleStatements"></rule>
+    <!--
+        Проверяет выравнивание назначений.
+        Если имеется несколько смежных назначений, программа проверит, выровнены ли знаки равенства в каждом назначении.
+        Отобразится предупреждение о том, что знаки должны быть выровнены.
+        По обе стороны от знака равенства, используемого для присвоения значения переменной, должно быть по одному пробелу.
+        В случае блока связанных присваиваний может быть вставлено больше пробела для удобства чтения.
+        При использовании плюс-равно, минус-равно и т.д. Все равно убедитесь, что знаки равенства выровнены по одному пробелу после самого длинного имени переменной.
+     -->
+    <rule ref="Generic.Formatting.MultipleStatementAlignment"></rule>
+    <!-- После приведения допускается ровно один пробел. -->
+    <rule ref="Generic.Formatting.SpaceAfterCast"/>
+    <!-- После оператора NOT допускается ровно один пробел. -->
+    <rule ref="Generic.Formatting.SpaceAfterNot">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <!-- Гарантирует наличие единственного пробела перед приведенными токенами. -->
+    <!-- <rule ref="Generic.Formatting.SpaceBeforeCast"></rule> -->
+    <!--
+        Гарантирует, что переменные не передаются по ссылке при вызове функции.
+        Передача по ссылке во время вызова недопустима. Это должно быть объявлено в определении функции.
+     -->
+    <rule ref="Generic.Functions.CallTimePassByReference"></rule>
+    <!--
+        Проверяет, правильно ли расставлены интервалы между вызовами методов и функций.
+        Аргументы функции должны содержать один пробел после запятой и одиночные пробелы вокруг знака равенства для значений по умолчанию.
+     -->
+    <rule ref="Generic.Functions.FunctionCallArgumentSpacing"></rule>
+    <!--
+        Проверяет, находится ли открывающая фигурная скобка функции в строке после объявления функции.
+        Объявления функций соответствуют "стилю BSD/Allman".
+        Функциональная фигурная скобка находится в строке после объявления функции и имеет отступ в том же столбце, что и начало объявления функции.
+     -->
+    <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman">
+        <properties>
+            <property name="checkFunctions" value="true" />
+            <property name="checkClosures" value="true" />
+        </properties>
+    </rule>
+    <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine">
+        <severity>0</severity>
+    </rule>
+    <!--
+        Проверяет цикломатическую сложность (McCabe) функций.
+        Цикломатическая сложность (также называемая метриками кода McCabe) указывает сложность внутри функции путем подсчета различных путей, которые включает функция.
+        Функции не должны иметь цикломатическую сложность, превышающую 20, и должны стараться оставаться ниже уровня сложности 10.
+     -->
+    <rule ref="Generic.Metrics.CyclomaticComplexity">
+        <properties>
+            <property name="complexity" value="15" />
+            <property name="absoluteComplexity" value="30" />
+        </properties>
+    </rule>
+    <!--
+        Проверяет уровень вложенности методов.
+        Функции не должны иметь уровень вложенности больше 10 и должны стараться оставаться ниже 5.
+     -->
+    <rule ref="Generic.Metrics.NestingLevel">
+        <properties>
+            <property name="nestingLevel" value="8" />
+            <property name="absoluteNestingLevel" value="12" />
+        </properties>
+    </rule>
+    <!--
+        Проверяет, что абстрактные классы имеют префикс Abstract.
+        Имена абстрактных классов должны иметь префикс "Abstract", например Abstract Bar.
+     -->
+    <rule ref="Generic.NamingConventions.AbstractClassNamePrefix"></rule>
+    <!--
+        Гарантирует, что метод и функции названы правильно.
+        Функции должны использовать формат camel Caps для своих имен. Только волшебные методы PHP должны использовать префикс двойного подчеркивания.
+     -->
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName">
+        <properties>
+            <property name="strict" value="false" />
+        </properties>
+    </rule>
+    <!--
+        Запрещает конструкторы в стиле PHP 4.
+        Отдавайте предпочтение синтаксису конструктора PHP 5, который использует "function __construct()".
+        Избегайте синтаксиса конструктора PHP 4, который использует "function className()".
+     -->
+    <rule ref="Generic.NamingConventions.ConstructorName"/>
+    <!--
+        Проверяет, что интерфейсы имеют суффикс Interface.
+        Имена интерфейсов должны иметь суффикс "Interface", например, Bar Interface.
+     -->
+    <rule ref="Generic.NamingConventions.InterfaceNameSuffix"></rule>
+    <!--
+        Проверяет, что к признакам добавляется суффикс Trait.
+        Имена признаков должны иметь суффикс "Trait", например, черта Bar.
+     -->
+    <rule ref="Generic.NamingConventions.TraitNameSuffix"></rule>
+    <!--
+        Гарантирует, что все имена констант написаны в верхнем регистре.
+        Константы всегда должны быть полностью прописными, с подчеркиванием для разделения слов.
+     -->
+    <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+    <!--
+        Запрещает использование оператора выполнения обратного нажатия.
+        Запретить использование оператора обратного нажатия для выполнения команд оболочки.
+     -->
+    <rule ref="Generic.PHP.BacktickOperator"></rule>
+    <!--
+        Проверяет, что открывающий PHP-тег является первым содержимым в файле.
+        Открывающий php-тег должен быть первым элементом в файле.
+     -->
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"></rule>
+    <!-- Препятствует использованию устаревших функций PHP. -->
+    <rule ref="Generic.PHP.DeprecatedFunctions"/>
+    <!--
+        Проверяет, что альтернативные теги PHP не используются.
+        Если найдены альтернативные теги открытия PHP, этот анализатор может исправить как открытые, так и закрытые теги.
+     -->
+    <rule ref="Generic.PHP.DisallowAlternativePHPTags"></rule>
+    <!--
+        Гарантирует, что суперглобальный $_REQUEST не используется
+        $_REQUEST никогда не следует использовать из-за возникающей двусмысленности относительно того, откуда поступают данные. Вместо этого используйте $_POST, $_GET или $_COOKIE.
+     -->
+    <rule ref="Generic.PHP.DisallowRequestSuperglobal"></rule>
+    <!--
+        Гарантирует, что не используются сокращенные теги PHP open.
+        Всегда используйте <?php ?> для разграничения кода PHP, а не сокращение <? ?>. Это наиболее переносимый способ включения кода PHP в различные операционные системы и настройки.
+     -->
+    <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+    <!-- Не рекомендуется использовать языковую конструкцию PHP goto. -->
+    <rule ref="Generic.PHP.DiscourageGoto"></rule>
+    <!--
+        Препятствует использованию псевдонимных функций.
+        Псевдонимные функции сохраняются в PHP для совместимости со старыми версиями. Может использоваться для запрета использования любой функции.
+     -->
+    <rule ref="Generic.PHP.ForbiddenFunctions">
+        <properties>
+            <property name="forbiddenFunctions" type="array">
+                <element key="sizeof" value="count"/>
+                <element key="delete" value="unset"/>
+                <element key="print" value="echo"/>
+                <element key="is_null" value="null"/>
+                <element key="create_function" value="null"/>
+            </property>
+        </properties>
+    </rule>
+    <!-- Проверяет, что все значения true, false и null написаны в нижнем регистре. -->
+    <rule ref="Generic.PHP.LowerCaseConstant"/>
+    <!-- Проверяет, что все ключевые слова PHP написаны в нижнем регистре. -->
+    <rule ref="Generic.PHP.LowerCaseKeyword"/>
+    <!-- Проверяет, что все типы PHP написаны в нижнем регистре. -->
+    <rule ref="Generic.PHP.LowerCaseType"></rule>
+    <!-- Выдает ошибку или предупреждение при обнаружении любого кода с префиксом asperand. -->
+    <rule ref="Generic.PHP.NoSilencedErrors">
+        <properties>
+            <property name="error" value="false" />
+        </properties>
+    </rule>
+    <!-- Проверяет, что strict_types был объявлен. -->
+    <rule ref="Generic.PHP.RequireStrictTypes"></rule>
+    <!-- Ensures the PHP_SAPI constant is used instead of php_sapi_name(). -->
+    <rule ref="Generic.PHP.SAPIUsage"></rule>
+    <!-- Гарантирует, что PHP считает синтаксис чистым. -->
+    <rule ref="Generic.PHP.Syntax"></rule>
+    <!-- Проверяет, что две строки не объединены вместе; предлагает вместо этого использовать одну строку. -->
+    <!-- The testing bootstrap file uses string concats to stop IDEs seeing the class aliases -->
+    <rule ref="Generic.Strings.UnnecessaryStringConcat">
+        <exclude-pattern>tests/bootstrap\.php</exclude-pattern>
+    </rule>
+    <!-- Check for merge conflict artefacts. -->
+    <rule ref="Generic.VersionControl.GitMergeConflict"></rule>
+    <!-- Tests that the correct Subversion properties are set. -->
+    <rule ref="Generic.VersionControl.SubversionProperties"></rule>
+    <!--
+        Проверьте и исправьте пробелы внутри произвольных круглых скобок.
+        Произвольные круглые скобки - это те, которые не принадлежат функции (вызову), массиву или управляющей структуре.
+        Интервал снаружи специально не проверяется, поскольку это слишком легко вступило бы в противоречие с другими правилами интервалов.
+     -->
+    <rule ref="Generic.WhiteSpace.ArbitraryParenthesesSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <!-- Выдает ошибки, если для отступа используются пробелы, отличные от точного отступа. -->
+    <!-- <rule ref="Generic.WhiteSpace.DisallowSpaceIndent"></rule> -->
+    <!-- Проверяет интервал между переменными и операторами увеличения/уменьшения. -->
+    <rule ref="Generic.WhiteSpace.IncrementDecrementSpacing"/>
+    <!-- Гарантирует, что все языковые конструкции содержат единый пробел между собой и своим содержимым. -->
+    <rule ref="Generic.WhiteSpace.LanguageConstructSpacing"></rule>
+    <!--
+        Проверяет правильность определения управляющих структур и их отступов.
+        Отступ для управляющих структур, классов и функций должен составлять 4 пробела на уровень.
+     -->
+    <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+    <!--
+        Проверяет интервал между оператором spread и вызовом переменной/функции, к которой он применяется.
+        Между оператором spread и вызовом переменной/функции, к которой он применяется, не должно быть пробела.
+     -->
+    <rule ref="Generic.WhiteSpace.SpreadOperatorSpacingAfter">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+
+    <!-- Открывающая фигурная скобка класса должна находиться в строке после самого определения. -->
+    <rule ref="PEAR.Classes.ClassDeclaration"></rule>
+    <!-- Checks that no Perl-style comments are used. -->
+    <rule ref="PEAR.Commenting.InlineComment"></rule>
+    <!--
+        Обеспечьте многострочность, если условия определены правильно.
+        Многострочные условия if должны иметь отступ на один уровень, и каждая строка должна начинаться с логического оператора. Конечная скобка должна быть на новой строке.
+     -->
+    <!-- <rule ref="PEAR.ControlStructures.MultiLineCondition">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule> -->
+    <!--
+        Убедитесь, что include_once используется в условных ситуациях, а require_once' используется в другом месте.
+        Также проверяет, что включаемый файл не заключен в квадратные скобки.
+        Везде, где вы безоговорочно включаете файл класса, используйте <em>require_once</em>.
+        Везде, где вы условно включаете файл класса (например, заводские методы), используйте <em>include_once</em>.
+        Любой из этих способов гарантирует, что файлы классов будут включены только один раз.
+        Они используют один и тот же список файлов, поэтому вам не нужно беспокоиться о их смешивании - файл, включенный с помощью <em>require_once</em>, не будет снова включен с помощью <em>include_once</em>.
+        Обратите внимание, что <em>include_once</em> и <em>require_once</em> являются операторами, а не функциями. Имя файла subject не должно заключаться в круглые скобки.
+     -->
+    <rule ref="PEAR.Files.IncludingFile"></rule>
+    <!--
+        Гарантирует, что вызовы функций отформатированы правильно.
+        Функции должны вызываться без пробелов между именем функции, открывающей круглой скобкой и первым параметром; и без пробелов между последним параметром, закрывающей круглой скобкой и точкой с запятой.
+     -->
+    <rule ref="PEAR.Functions.FunctionCallSignature">
+        <exclude name="PEAR.Functions.FunctionCallSignature.SpaceAfterCloseBracket" />
+    </rule>
+    <!--
+        После ключевого слова function должно быть ровно 1 пробел и по 1 пробелу с каждой стороны ключевого слова use.
+        Замыкания должны использовать стиль фигурных скобок Кернигана/Ричи, а другие однострочные функции должны использовать стиль BSD/Allman.
+        Многострочные объявления функций должны содержать списки параметров с отступом на один уровень с закрывающей круглой скобкой в новой строке, за которой следует один пробел и открывающая фигурная скобка функции.
+     -->
+    <rule ref="PEAR.Functions.FunctionDeclaration">
+        <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnNewLine" />
+        <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine" />
+    </rule>
+    <!-- Гарантирует, что параметры функции со значениями по умолчанию находятся в конце объявления. -->
+    <rule ref="PEAR.Functions.ValidDefaultValue"/>
+    <!--
+        Функции и методы должны быть названы в стиле "studly caps" (также называемом "неровный корпус" или "camel caps").
+        Функции также должны иметь имя пакета в качестве префикса, чтобы избежать коллизий имен между пакетами.
+        Начальная буква имени (после префикса) пишется строчными буквами, а каждая буква, с которой начинается новое "слово", пишется с заглавной буквы.
+     -->
+    <!-- <rule ref="PEAR.NamingConventions.ValidFunctionName"></rule> -->
+    <!--
+        Проверяет правильность отступа для объектных операторов.
+        Операторы цепочки объектов, распределенные по нескольким строкам, должны быть первыми в строке и иметь отступ на 1 уровень.
+     -->
+    <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent">
+        <properties>
+            <property name="multilevel" value="true" />
+        </properties>
+    </rule>
+    <!--
+        Закрывающие фигурные скобки должны иметь отступ на том же уровне, что и начало области видимости.
+     -->
+    <!-- <rule ref="PEAR.WhiteSpace.ScopeClosingBrace">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule> -->
+    <!--
+        Любые средства открытия области видимости, за исключением операторов switch, должны иметь отступ в 1 уровень. Сюда входят классы, функции и управляющие структуры.
+     -->
+    <!-- <rule ref="PEAR.WhiteSpace.ScopeIndent">
+        <properties>
+            <property name="exact" value="true" />
+            <property name="tabIndent" value="true" />
+            <property name="ignoreIndentationTokens" type="array">
+                <element value="T_COMMENT"/>
+                <element value="T_DOC_COMMENT_OPEN_TAG"/>
+            </property>
+        </properties>
+    </rule> -->
+
+    <!--
+        Проверяет правильность объявления класса.
+        Каждый класс должен находиться в отдельном файле и находиться в пространстве имен (имя поставщика верхнего уровня).
+     -->
+    <rule ref="PSR1.Classes.ClassDeclaration"></rule>
+    <!--
+        Гарантирует, что файл объявляет новые символы и не вызывает других побочных эффектов, или выполняет логику с побочными эффектами, но не то и другое сразу.
+        php-файл должен либо содержать объявления без побочных эффектов, либо просто содержать логику (включая побочные эффекты) без каких-либо объявлений.
+     -->
+    <rule ref="PSR1.Files.SideEffects"></rule>
+    <!--
+        Гарантирует, что имена методов определены с использованием регистра camel.
+        Имена методов ДОЛЖНЫ быть объявлены в camelCase.
+     -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName"></rule>
+
+    <rule ref="PSR12.Classes.AnonClassDeclaration">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <!-- Проверяет правильность объявления класса anon. -->
+    <rule ref="PSR12.Classes.AnonClassDeclaration">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <!--
+        Проверяет, что экземпляры классов созданы в круглых скобках.
+        При создании экземпляра нового класса круглые скобки должны присутствовать всегда, даже если конструктору не передаются аргументы.
+     -->
+    <rule ref="PSR12.Classes.ClassInstantiation"></rule>
+    <!-- Проверяет, что закрывающие фигурные скобки являются последним содержимым в строке. -->
+    <!-- <rule ref="PSR12.Classes.ClosingBrace"></rule> -->
+    <!-- Проверяет, что за открывающими фигурными скобками не следуют пустые строки. -->
+    <rule ref="PSR12.Classes.OpeningBraceSpace"></rule>
+    <!-- Проверяет, что управляющие структуры содержат логические операторы в правильном месте. -->
+    <rule ref="PSR12.ControlStructures.BooleanOperatorPlacement">
+        <properties>
+            <property name="allowOnly" value="first" />
+        </properties>
+    </rule>
+    <!-- Проверяет, чтобы управляющие структуры имели правильный интервал. -->
+    <rule ref="PSR12.ControlStructures.ControlStructureSpacing">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <!-- Проверяет формат инструкций declare. -->
+    <!-- <rule ref="PSR12.Files.DeclareStatement"></rule> -->
+    <!-- Проверяет формат заголовка файла. -->
+    <rule ref="PSR12.Files.FileHeader"></rule>
+    <!-- Проверяет правильность определения инструкций импорта. -->
+    <rule ref="PSR12.Files.ImportStatement"></rule>
+    <!-- Проверяет, правильно ли определен открытый тег. -->
+    <rule ref="PSR12.Files.OpenTag"/>
+    <!--
+        Проверяет, что в подсказках типа с нулевым значением отсутствуют лишние пробелы, например ?int
+        В объявлениях типов с возможностью обнуления НЕ должно быть пробела между вопросительным знаком и типом.
+     -->
+    <rule ref="PSR12.Functions.NullableTypeDeclaration"></rule>
+    <!-- Убедитесь, что возвращаемые типы определены правильно для функций и замыканий. -->
+    <!-- <rule ref="PSR12.Functions.ReturnTypeDeclaration"></rule> -->
+    <!--
+        Проверяет, используется ли краткая форма ключевых слов типа (например, int, bool).
+        НЕОБХОДИМО использовать краткую форму ключевых слов типа, т.е. bool вместо boolean, int вместо integer и т.д.
+    -->
+    <rule ref="PSR12.Keywords.ShortFormTypeKeywords"></rule>
+    <!--
+        Проверяет, что составные пространства имен определены не слишком глубоко.
+        Составные пространства имен глубиной более двух НЕ ДОЛЖНЫ использоваться.
+     -->
+    <rule ref="PSR12.Namespaces.CompoundNamespaceDepth">
+        <properties>
+            <property name="maxDepth" value="4" />
+        </properties>
+    </rule>
+    <!--
+        Проверяет, что операторы окружены допустимым интервалом.
+        Всем двоичным и троичным (но не унарным) операторам должен предшествовать хотя бы один пробел.
+        Это включает в себя все арифметические операции, сравнение, присваивание, побитовые, логические (исключая ! который является унарным), конкатенация строк, операторы типов, операторы признаков (insteadof и as) и оператор одиночного канала (например, ExceptionType1 | ExceptionType2 $e).
+     -->
+    <!-- <rule ref="PSR12.Operators.OperatorSpacing"></rule> -->
+    <!-- Проверяет, что для всех констант класса установлена их видимость. -->
+    <rule ref="PSR12.Properties.ConstantVisibility"></rule>
+    <!-- Проверяет, что операторы импорта признаков определены правильно. -->
+    <rule ref="PSR12.Traits.UseDeclaration"></rule>
+
+    <!--
+        Проверяет правильность объявления класса и его наследования.
+        Между ключевым словом abstract или final и ключевым словом class и между ключевым словом class и именем класса должен быть ровно 1 пробел. Ключевые слова extends и implements, если они присутствуют, должны находиться в той же строке, что и имя класса. Когда реализованные интерфейсы распределены по нескольким строкам, в каждой строке должен упоминаться ровно 1 интерфейс с отступом на 1 уровень. Закрывающая фигурная скобка класса должна располагаться в первой строке после тела класса и должна быть на отдельной строке.
+     -->
+    <rule ref="PSR2.Classes.ClassDeclaration">
+        <properties>
+            <property name="indent" value="2" />
+        </properties>
+    </rule>
+    <!--
+        Проверяет, что свойства объявлены правильно.
+        Имена свойств не должны иметь префикса подчеркивания для указания видимости. Для объявления свойств следует использовать Visibility, а не ключевое слово var.
+        В инструкции должно быть объявлено только одно свойство. Статическое объявление должно следовать за объявлением видимости.
+     -->
+    <rule ref="PSR2.Classes.PropertyDeclaration"/>
+    <rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+        <type>error</type>
+    </rule>
+    <!--
+        Проверяет, чтобы управляющие структуры имели правильный интервал между скобками.
+        Управляющие структуры должны содержать 0 пробелов после открывающих круглых скобок и 0 пробелов перед закрывающими круглыми скобками.
+     -->
+    <rule ref="PSR2.ControlStructures.ControlStructureSpacing"/>
+    <!--
+        Одним из правил, которые соблюдает этот сдвиг, является отступ каждого условия в структуре элемента управления, когда условия разделены на несколько строк.
+        По умолчанию этот параметр определяет, что условия имеют отступ в 4 пробела, но вы можете изменить размер отступа, установив свойство indent.
+     -->
+    <rule ref="PSR12.ControlStructures.ControlStructureSpacing"/>
+    <!--
+        Проверяет, что нет операторов else if (вместо них следует использовать elseif).
+        Ключевое слово elseif в PHP следует использовать вместо else if.
+     -->
+    <rule ref="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed"/>
+    <!--
+        Гарантирует, что все операторы switch определены правильно.
+        Операторы Case должны иметь отступ в 4 пробела от ключевого слова switch. За ним также должен следовать пробел.
+        Двоеточиям в объявлениях switch не должны предшествовать пробелы. Операторы Break должны иметь отступ еще на 4 пробела от оператора case.
+        При переходе от одного регистра к следующему должен быть комментарий.
+     -->
+    <rule ref="PSR2.ControlStructures.SwitchDeclaration">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <!-- Гарантирует, что файл заканчивается символом новой строки. -->
+    <rule ref="PSR2.Files.EndFileNewline"/>
+    <!-- Проверяет правильность формата вызова функции. -->
+    <rule ref="PSR2.Methods.FunctionCallSignature">
+        <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterCloseBracket" />
+    </rule>
+    <!-- Проверяет, что закрывающая фигурная скобка функции следует непосредственно за телом. -->
+    <rule ref="PSR2.Methods.FunctionClosingBrace"></rule>
+    <!--
+        Проверяет правильность объявления метода.
+        Имена методов не должны иметь префикса с подчеркиванием, чтобы указать на видимость.
+        Ключевое слово static, если оно присутствует, должно быть указано после объявления видимости, а ключевые слова final и abstract должны быть указаны до этого.
+     -->
+    <rule ref="PSR2.Methods.MethodDeclaration"/>
+    <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+        <type>error</type>
+    </rule>
+    <!--
+        Гарантирует, что пространства имен объявлены правильно.
+        После объявления пространства имен должна быть одна пустая строка.
+     -->
+    <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
+    <!--
+        Гарантирует, что используемые блоки объявлены правильно.
+        Каждое объявление use должно содержать только одно пространство имен и должно следовать за первым объявлением пространства имен. После последнего заявления use должна быть одна пустая строка.
+     -->
+    <!-- <rule ref="PSR2.Namespaces.UseDeclaration"/> -->
+
+    <!--
+        Убедитесь, что вокруг квадратных скобок нет пробелов.
+        При ссылках на массивы вы не должны ставить пробелы вокруг открывающей скобки или перед закрывающей скобкой.
+     -->
+    <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+    <!--
+        Гарантирует, что массивы соответствуют стандарту кодирования массивов.
+        Этот стандарт распространяется на все объявления массивов, независимо от количества и типа значений, содержащихся в массиве.
+        Ключевое слово <em>array</em> должно быть в нижнем регистре.
+        Первый ключ массива должен начинаться в строке после ключевого слова <em>array</em>.
+        Все ключи массива должны иметь отступ в один пробел после начала ключевого слова <em>array</em>. Закрывающая скобка должна быть выровнена по началу ключевого слова <em>array</em>.
+        Все символы с двойными стрелками должны быть выровнены на один пробел после самого длинного ключа массива. Выравнивание должно быть достигнуто с использованием пробелов.
+        За всеми значениями массива должна следовать запятая, включая конечное значение.
+     -->
+    <!-- <rule ref="Squiz.Arrays.ArrayDeclaration"></rule> -->
+    <!-- Проверяет правильность объявления класса и его наследования. -->
+    <rule ref="Squiz.Classes.ClassDeclaration">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule>
+    <!-- Проверяет, совпадают ли имя файла и имя класса, содержащегося в файле. -->
+    <rule ref="Squiz.Classes.ClassFileName"></rule>
+    <!--
+        Гарантирует, что все ключевые слова класса написаны в нижнем регистре.
+        Ключевые слова php class, interface, trait, extends, implements, abstract, final, var и const должны быть строчными.
+     -->
+    <rule ref="Squiz.Classes.LowercaseClassKeywords"></rule>
+    <!--
+        Проверяет ссылки на элементы self.
+        Проверяет, что :
+        self:: используется вместо Self::
+        self:: используется для локальной статической ссылки на элемент
+        self:: используется вместо self ::
+        Ключевое слово self должно использоваться вместо текущего имени класса, должно быть в нижнем регистре и не должно содержать пробелов ни до, ни после него.
+     -->
+    <rule ref="Squiz.Classes.SelfMemberReference"></rule>
+    <!-- Гарантирует, что классы написаны заглавными буквами camel, а первая буква пишется с заглавной буквы. -->
+    <rule ref="Squiz.Classes.ValidClassName"></rule>
+    <!-- Проверяет, что комментарии к блокам используются надлежащим образом. -->
+    <!-- <rule ref="Squiz.Commenting.BlockComment"></rule> -->
+    <!-- Проверяет комментарии //end ... к классам, интерфейсам и функциям. -->
+    <rule ref="Squiz.Commenting.ClosingDeclarationComment"></rule>
+    <!--
+        Проверяет правильность выравнивания звездочек в комментарии к документу.
+        Звездочки в комментарии к документу должны быть выровнены, и между звездочкой и тегами должен быть один пробел.
+     -->
+    <rule ref="Squiz.Commenting.DocCommentAlignment"></rule>
+    <!-- Проверяет наличие пустого предложения catch без комментария. -->
+    <rule ref="Squiz.Commenting.EmptyCatchComment"></rule>
+    <!-- Анализирует и проверяет комментарий к файлу doc. -->
+    <!-- <rule ref="Squiz.Commenting.FileComment"></rule> -->
+    <!-- Анализирует и проверяет комментарии doc для функций. -->
+    <!-- <rule ref="Squiz.Commenting.FunctionComment"></rule> -->
+    <!--
+        Проверяет, существует ли тег @throws для каждого типа исключения, генерируемого функцией.
+        Если функция генерирует какие-либо исключения, они должны быть задокументированы в теге @throws.
+     -->
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag"></rule>
+    <!-- Проверяет наличие достаточного интервала между комментариями. -->
+    <!-- <rule ref="Squiz.Commenting.InlineComment"></rule> -->
+    <!-- Гарантирует, что в конце длинных условий будет комментарий. -->
+    <rule ref="Squiz.Commenting.LongConditionClosingComment"></rule>
+    <!-- Проверяет, нет ли комментариев после утверждений. -->
+    <rule ref="Squiz.Commenting.PostStatementComment"></rule>
+    <!-- Анализирует и проверяет переменную doc comment. -->
+    <!-- <rule ref="Squiz.Commenting.VariableComment"></rule> -->
+    <!-- Проверяет соответствие управляющих инструкций их стандартам кодирования. -->
+    <!-- <rule ref="Squiz.ControlStructures.ControlSignature">
+        <properties>
+            <property name="requiredSpacesBeforeColon" value="0" />
+        </properties>
+    </rule> -->
+    <!--
+        Проверяет наличие пробела между каждым условием циклов foreach.
+        Между каждым элементом цикла foreach должен быть пробел, а ключевое слово as должно быть в нижнем регистре.
+     -->
+    <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration">
+        <properties>
+            <property name="requiredSpacesAfterOpen" value="0" />
+            <property name="requiredSpacesBeforeClose" value="0" />
+        </properties>
+    </rule>
+    <!--
+        Проверяет наличие пробела между каждым условием циклов for.
+        В объявлении цикла for внутри квадратных скобок не должно быть пробелов, а перед точкой с запятой должно быть 0 пробелов и 1 пробел после точки с запятой.
+     -->
+    <rule ref="Squiz.ControlStructures.ForLoopDeclaration">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <!-- Проверяет интервал между сокращенными операторами IF. -->
+    <rule ref="Squiz.ControlStructures.InlineIfDeclaration">
+        <exclude name="Squiz.ControlStructures.InlineIfDeclaration.NoBrackets" />
+    </rule>
+    <!--
+        Гарантирует, что все ключевые слова структуры управления написаны в нижнем регистре.
+        Ключевые слова php if, else, elseif, foreach, for, do, switch, while, try и catch должны быть строчными.
+     -->
+    <rule ref="Squiz.ControlStructures.LowercaseDeclaration"></rule>
+    <!-- Принудительно применяет форматирование инструкции switch. -->
+    <!-- <rule ref="Squiz.ControlStructures.SwitchDeclaration">
+        <properties>
+            <property name="indent" value="4" />
+        </properties>
+    </rule> -->
+    <!-- Проверяет, что классы и интерфейсы не объявлены в файлах .php. -->
+    <!-- <rule ref="Squiz.Files.FileExtension"></rule> -->
+    <!-- Проверяет, что все арифметические операции заключены в квадратные скобки. -->
+    <!-- <rule ref="Squiz.Formatting.OperatorBracket"></rule> -->
+    <!-- Проверяет правильность объявления функции. -->
+    <rule ref="Squiz.Functions.FunctionDeclaration">
+        <properties>
+            <property name="ignoreComments" value="false" />
+        </properties>
+    </rule>
+    <!-- Проверяет, правильно ли расставлены аргументы в объявлениях функций. -->
+    <rule ref="Squiz.Functions.FunctionDeclarationArgumentSpacing">
+        <properties>
+            <property name="equalsSpacing" value="1" />
+            <property name="requiredSpacesAfterOpen" value="0" />
+            <property name="requiredSpacesBeforeClose" value="0" />
+        </properties>
+    </rule>
+    <!-- Проверяет, не используются ли повторяющиеся аргументы в объявлениях функций. -->
+    <rule ref="Squiz.Functions.FunctionDuplicateArgument"></rule>
+    <!-- Tests for functions outside of classes. -->
+    <rule ref="Squiz.Functions.GlobalFunction"></rule>
+    <!-- Ключевые слова php function, public, private, protected и static должны быть в нижнем регистре. -->
+    <rule ref="Squiz.Functions.LowercaseFunctionKeywords"></rule>
+    <!-- Убедитесь, что объявления однострочных и многострочных функций определены правильно. -->
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration">
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnNewLine" />
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine" />
+    </rule>
+    <!-- Гарантирует правильность названий методов. -->
+    <!-- <rule ref="Squiz.NamingConventions.ValidFunctionName"></rule> -->
+    <!-- Проверяет именование переменных и переменных-членов. -->
+    <!-- <rule ref="Squiz.NamingConventions.ValidVariableName"></rule> -->
+    <!-- Гарантирует, что индексы объектов записываются в точечной нотации. -->
+    <rule ref="Squiz.Objects.DisallowObjectStringIndex"></rule>
+    <!-- Гарантирует, что объекты присваиваются переменной при создании экземпляра. -->
+    <rule ref="Squiz.Objects.ObjectInstantiation">
+        <exclude name="Squiz.Objects.ObjectInstantiation.NotAssigned" />
+    </rule>
+    <!-- Гарантирует, что за последним элементом объекта не следует запятая. -->
+    <rule ref="Squiz.Objects.ObjectMemberComma"></rule>
+    <!-- A Sniff to enforce the use of IDENTICAL type operators rather than EQUAL operators. -->
+    <!-- <rule ref="Squiz.Operators.ComparisonOperatorUsage"></rule> -->
+    <!-- Ensures that the ++ operators are used when possible. -->
+    <rule ref="Squiz.Operators.IncrementDecrementUsage"></rule>
+    <!-- Гарантирует, что логические операторы "и" и "или" не используются. -->
+    <rule ref="Squiz.Operators.ValidLogicalOperators"></rule>
+    <!-- Предупреждать о закомментированном коде. -->
+    <rule ref="Squiz.PHP.CommentedOutCode">
+        <properties>
+            <property name="maxPercentage" value="20" />
+        </properties>
+    </rule>
+    <!-- Гарантирует, что логические операторы используются только внутри условий структуры управления. -->
+    <!-- <rule ref="Squiz.PHP.DisallowBooleanStatement"></rule> -->
+    <!-- Гарантирует, что значение сравнения не присваивается переменной. -->
+    <!-- <rule ref="Squiz.PHP.DisallowComparisonAssignment"></rule> -->
+    <!-- Останавливает использование встроенных инструкций IF. -->
+    <!-- <rule ref="Squiz.PHP.DisallowInlineIf"></rule> -->
+    <!-- Гарантирует, что в строке есть только одно назначение и что оно является первым в строке. -->
+    <rule ref="Squiz.PHP.DisallowMultipleAssignments"></rule>
+    <!-- Запрещает использование функций, основанных на размере, в условиях цикла. -->
+    <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"></rule>
+    <!-- Препятствует использованию функций отладки. -->
+    <rule ref="Squiz.PHP.DiscouragedFunctions">
+        <properties>
+            <property name="error" value="false" />
+        </properties>
+    </rule>
+    <!-- Проверяет отступы встроенных сегментов PHP-кода. -->
+    <rule ref="Squiz.PHP.EmbeddedPhp"></rule>
+    <!-- Использование eval() не рекомендуется. -->
+    <rule ref="Squiz.PHP.Eval"></rule>
+    <!-- Гарантирует, что функции внутри функций никогда не будут использоваться. -->
+    <rule ref="Squiz.PHP.InnerFunctions"></rule>
+    <!-- Гарантирует, что все вызовы встроенных функций PHP написаны в нижнем регистре. -->
+    <rule ref="Squiz.PHP.LowercasePHPFunctions"></rule>
+    <!-- Предупреждает о коде, который никогда не может быть выполнен. -->
+    <rule ref="Squiz.PHP.NonExecutableCode"></rule>
+    <!-- Проверяет, что члены класса имеют модификаторы области видимости. -->
+    <rule ref="Squiz.Scope.MemberVarScope"></rule>
+    <!-- Проверяет, что методы класса имеют модификаторы области видимости. -->
+    <rule ref="Squiz.Scope.MethodScope"></rule>
+    <!-- Проверяет использование $this в статических методах, что приведет к ошибкам во время выполнения. -->
+    <rule ref="Squiz.Scope.StaticThisUsage"></rule>
+    <!-- Проверяет, нет ли пробелов вокруг оператора объединения. -->
+    <rule ref="Squiz.Strings.ConcatenationSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <!-- Гарантирует, что любое использование строк в двойных кавычках оправдано. -->
+    <!-- <rule ref="Squiz.Strings.DoubleQuoteUsage"></rule> -->
+    <!-- Следит за тем, чтобы все строки, которые "повторяются", не были заключены в квадратные скобки. -->
+    <rule ref="Squiz.Strings.EchoedStrings"></rule>
+    <!-- Убедитесь, что операторы приведения не содержат пробелов. -->
+    <rule ref="Squiz.WhiteSpace.CastSpacing"></rule>
+    <!-- Проверяет, чтобы управляющие структуры имели правильный интервал между скобками. -->
+    <rule ref="Squiz.WhiteSpace.ControlStructureSpacing"></rule>
+    <!-- Проверяет, есть ли одна пустая строка перед закрывающей фигурной скобкой функции. -->
+    <!-- <rule ref="Squiz.WhiteSpace.FunctionClosingBraceSpace"></rule> -->
+    <!-- Проверяет, нет ли пустой строки после открывающей фигурной скобки функции. -->
+    <rule ref="Squiz.WhiteSpace.FunctionOpeningBraceSpace"></rule>
+    <!-- Проверяет разделение между функциями и методами. -->
+<!--     <rule ref="Squiz.WhiteSpace.FunctionSpacing">
+        <properties>
+            <property name="spacing" value="1" />
+        </properties>
+    </rule>
+ -->
+    <!--
+        Гарантирует, что все языковые конструкции содержат единый пробел между собой и своим содержимым.
+        Конструкции php echo, print, return, include, include_once, require, require_once и new должны иметь после себя один пробел.
+     -->
+    <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing"></rule>
+    <!-- Проверяет, что операторы окружены допустимым интервалом. -->
+    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"></rule>
+    <!-- Проверяет правильность расположения элементов класса. -->
+    <rule ref="Squiz.WhiteSpace.MemberVarSpacing">
+        <properties>
+            <property name="spacing" value="1" />
+            <property name="spacingBeforeFirst" value="0" />
+        </properties>
+    </rule>
+    <!-- Убедитесь, что перед/после оператора object нет пробелов. -->
+    <rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
+    <!-- Проверяет, что операторы окружены допустимым интервалом. -->
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+        <properties>
+            <property name="ignoreSpacingBeforeAssignments" value="true" />
+        </properties>
+    </rule>
+    <!-- Гарантирует, что двоеточие свойства или метки содержит один пробел после него и никакого пробела перед ним. -->
+    <rule ref="Squiz.WhiteSpace.PropertyLabelSpacing"></rule>
+    <!-- Проверяет, правильно ли выровнены закрывающие фигурные скобки областей. -->
+    <!-- <rule ref="Squiz.WhiteSpace.ScopeClosingBrace"></rule> -->
+    <!-- После ключевых слов php static, public, private и protected должен быть один пробел. -->
+    <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing"></rule>
+    <!-- Убедитесь, что перед точкой с запятой нет пробелов. -->
+    <rule ref="Squiz.WhiteSpace.SemicolonSpacing">
+        <exclude name="Squiz.WhiteSpace.SemicolonSpacing.Incorrect" />
+    </rule>
+    <!--
+        Проверяет наличие ненужных пробелов.
+
+        Проверяет, что пробелы не предшествуют первому содержимому файла, не существуют после последнего содержимого файла, находятся после содержимого в любой строке или являются двумя пустыми строками в функциях.
+     -->
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <property name="ignoreBlankLines" value="true" />
+        </properties>
+    </rule>
+
+    <file>bin/</file>
+    <file>config/</file>
+    <file>public/</file>
+    <file>src/</file>
+    <file>tests/</file>
+
+</ruleset>

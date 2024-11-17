@@ -1,0 +1,11 @@
+parameters:
+    tips:
+        treatPhpDocTypesAsCertain: true
+    level: 6
+    cache:
+        nodesByStringCountMax: 0
+    parallel:
+        maximumNumberOfProcesses: 8
+    paths:
+        - ../src/Modbus.php
+        - ../driver.php
