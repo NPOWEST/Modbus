@@ -17,6 +17,7 @@ use function chr;
 use function in_array;
 use function ord;
 use function sprintf;
+use function strlen;
 
 use const AF_INET;
 use const PHP_BINARY_READ;
@@ -163,7 +164,7 @@ final class Modbus
     {
         $expectedAddress = sprintf('%02x', $this->addrModbus);
 
-        return mb_substr($result, 0, 2) === $expectedAddress;
+        return substr($result, 0, 2) === $expectedAddress;
     }//end isValidResponse()
 
     private function getResult(): false|string
@@ -194,16 +195,16 @@ final class Modbus
 
     private function parserResult(string $result): string
     {
-        $answer = mb_substr($result, 2, 2);
+        $answer = substr($result, 2, 2);
         switch ($answer)
         {
             case '03':
                 // Get response
-                return mb_substr($result, 6, -4);
+                return substr($result, 6, -4);
 
             case '10':
                 // Set response
-                return mb_substr($result, 4, -4);
+                return substr($result, 4, -4);
             default:
                 $this->error = 'Invalid response: '.$result;
 
@@ -216,7 +217,7 @@ final class Modbus
         if ($this->readySocket && $this->msg)
         {
             $msg          = $this->prepareMsg();
-            $bytesWritten = socket_write($this->socket, $msg, mb_strlen($msg));
+            $bytesWritten = socket_write($this->socket, $msg, strlen($msg));
             if (false === $bytesWritten)
             {
                 $this->error = 'Socket write error: '.socket_strerror(socket_last_error($this->socket));
@@ -237,7 +238,7 @@ final class Modbus
             return '';
         }
 
-        $msg = mb_str_split($this->msg, 2);
+        $msg = str_split($this->msg, 2);
 
         $result = chr($this->addrModbus);
         foreach ($msg as $str)
@@ -268,7 +269,7 @@ final class Modbus
     private function crc16(string $data): int
     {
         $crc = 0xFF_FF;
-        $len = mb_strlen($data);
+        $len = strlen($data);
         for ($i = 0; $i < $len; ++$i)
         {
             $crc ^= ord($data[$i]);
@@ -283,6 +284,6 @@ final class Modbus
 
     private function printPacket(string $packet): string
     {
-        return implode('', array_map(static fn ($byte) => sprintf('%02x', ord($byte)), mb_str_split($packet)));
+        return implode('', array_map(static fn ($byte) => sprintf('%02x', ord($byte)), str_split($packet)));
     }//end printPacket()
 }//end class
