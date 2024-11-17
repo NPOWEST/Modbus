@@ -4,7 +4,7 @@
 
 Установка:
 ```shell
-composer install npowest/modbus
+composer require npowest/modbus
 ```
 
 **setAddress**(Хост, Порт, Modbus-адрес) - *Установка адреса*

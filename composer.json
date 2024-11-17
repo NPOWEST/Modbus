@@ -2,6 +2,13 @@
     "name": "npowest/modbus",
     "description": "Modbus",
     "version": "1.0.0",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Npowest"
+        }
+    ],
     "require": {
         "php": "^8.2"
     },
