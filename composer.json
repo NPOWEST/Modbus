@@ -1,7 +1,7 @@
 {
     "name": "npowest/modbus",
     "description": "Modbus",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "license": "MIT",
     "type": "library",
     "authors": [
